@@ -25,8 +25,10 @@ npm run build
 
 - Agregar tareas; marcarlas como completadas o pendientes y eliminarlas.
 - Filtrar por todas, pendientes o completadas, y ordenar por nombre A–Z / Z–A.
+- Las tareas se guardan en `localStorage` bajo `taskflow-tasks` y se recuperan al recargar. El indicador cambia a “Guardado automáticamente” solo después de completar la escritura; los errores se muestran y registran en consola.
 - Cambiar el tema claro/oscuro. La preferencia se conserva en `localStorage` y se sincroniza con otras pestañas.
-- La entrada recupera el foco después de agregar una tarea.
+- El hook `useLocalStorage` carga el nuevo valor cuando cambia dinámicamente la clave y limpia el listener de `storage` al desmontarse o cambiar la clave.
+- La entrada recibe el foco al abrir la aplicación y después de agregar una tarea.
 - Resumen de tareas totales, pendientes y completadas.
 
 ## Diagrama de flujo de estado y ciclo de render
@@ -60,6 +62,10 @@ ThemeProvider ── useLocalStorage ── localStorage
                        ├─ inicializa el tema desde almacenamiento
                        ├─ persiste cambios con useEffect
                        └─ escucha `storage`; cleanup quita el listener
+
+Dashboard ── useReducer(items) ── useEffect ── localStorage
+    ▲                                      │
+    └────────── carga inicial al montar ────┘
 
 TaskList ── useRef ── input DOM (focus sin render adicional)
          └─ useState ── borrador local del formulario

@@ -1,7 +1,35 @@
-import React, { useCallback, useContext, useMemo, useReducer, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useReducer, useState } from 'react'
 import TaskList from './components/TaskList.jsx'
 import { ThemeContext, ThemeProvider } from './contexts/ThemeContext.jsx'
 import tasksReducer, { initialState, taskActions } from './hooks/useTasksReducer.js'
+
+const TASKS_STORAGE_KEY = 'taskflow-tasks'
+
+const isStoredTask = (task) => (
+  task !== null
+  && typeof task === 'object'
+  && typeof task.id === 'string'
+  && typeof task.title === 'string'
+  && typeof task.completed === 'boolean'
+  && typeof task.createdAt === 'string'
+)
+
+const loadInitialState = () => {
+  try {
+    const storedTasks = window.localStorage.getItem(TASKS_STORAGE_KEY)
+    if (storedTasks === null) return initialState
+
+    const items = JSON.parse(storedTasks)
+    if (!Array.isArray(items) || !items.every(isStoredTask)) {
+      throw new TypeError('Los datos guardados no tienen el formato esperado.')
+    }
+
+    return { ...initialState, items }
+  } catch (error) {
+    console.error('No se pudieron cargar las tareas desde localStorage.', error)
+    return initialState
+  }
+}
 
 const filters = [
   { value: 'all', label: 'Todas' },
@@ -10,9 +38,20 @@ const filters = [
 ]
 
 function Dashboard() {
-  const [state, dispatch] = useReducer(tasksReducer, initialState)
+  const [state, dispatch] = useReducer(tasksReducer, undefined, loadInitialState)
   const [showHelp, setShowHelp] = useState(false)
+  const [saveStatus, setSaveStatus] = useState('saving')
   const { theme, toggleTheme } = useContext(ThemeContext)
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(state.items))
+      setSaveStatus('saved')
+    } catch (error) {
+      console.error('No se pudieron guardar las tareas en localStorage.', error)
+      setSaveStatus('error')
+    }
+  }, [state.items])
 
   const visibleTasks = useMemo(() => {
     const filtered = state.items.filter((task) => {
@@ -30,6 +69,7 @@ function Dashboard() {
   }, [state.items, state.filter, state.sort])
 
   const addTask = useCallback((title) => {
+    setSaveStatus('saving')
     dispatch({
       type: taskActions.ADD,
       payload: {
@@ -45,10 +85,12 @@ function Dashboard() {
   }, [])
 
   const removeTask = useCallback((id) => {
+    setSaveStatus('saving')
     dispatch({ type: taskActions.REMOVE, payload: id })
   }, [])
 
   const toggleTask = useCallback((id) => {
+    setSaveStatus('saving')
     dispatch({ type: taskActions.TOGGLE, payload: id })
   }, [])
 
@@ -192,7 +234,14 @@ function Dashboard() {
             </div>
             <footer className="tasks-footer">
               <span>Mostrando <strong>{visibleTasks.length}</strong> de <strong>{state.items.length}</strong> tareas</span>
-              <span><span className="sync-dot" /> Guardado automáticamente</span>
+              <span aria-live="polite">
+                <span className={`sync-dot${saveStatus === 'error' ? ' sync-error' : ''}`} />
+                {saveStatus === 'saving'
+                  ? 'Guardando...'
+                  : saveStatus === 'error'
+                    ? 'No se pudieron guardar las tareas'
+                    : 'Guardado automáticamente'}
+              </span>
             </footer>
           </section>
 

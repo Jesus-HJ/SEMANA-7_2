@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useRef, useState } from 'react'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 
 const TaskRow = memo(function TaskRow({ task, onRemove, onToggle }) {
   const handleToggle = useCallback(() => onToggle(task.id), [onToggle, task.id])
@@ -32,6 +32,10 @@ const TaskRow = memo(function TaskRow({ task, onRemove, onToggle }) {
 const TaskList = memo(function TaskList({ tasks, onAdd, onRemove, onToggle }) {
   const [draft, setDraft] = useState('')
   const inputRef = useRef(null)
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault()

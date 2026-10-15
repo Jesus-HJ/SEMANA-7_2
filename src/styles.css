@@ -131,6 +131,7 @@ h1 { margin-bottom: 5px; font: 800 31px Manrope, sans-serif; letter-spacing: -1.
 .tasks-footer { min-height: 37px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 8px; }
 .tasks-footer strong { color: var(--text); }
 .sync-dot { display: inline-block; width: 5px; height: 5px; margin-right: 4px; border-radius: 50%; background: #4fb687; }
+.sync-error { background: #d45e66; }
 .page-footer { display: flex; justify-content: space-between; margin-top: 21px; color: var(--muted); font-size: 9px; }
 .footer-theme { display: flex; align-items: center; gap: 6px; padding: 0; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 9px; }
 .footer-theme span { font-size: 14px; }

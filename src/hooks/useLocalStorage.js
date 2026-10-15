@@ -13,7 +13,13 @@ const readStoredValue = (key, defaultValue) => {
 }
 
 export const useLocalStorage = (key, defaultValue) => {
-  const [value, setValue] = useState(() => readStoredValue(key, defaultValue))
+  const [storedState, setStoredState] = useState(() => ({
+    key,
+    value: readStoredValue(key, defaultValue),
+  }))
+  const value = storedState.key === key
+    ? storedState.value
+    : readStoredValue(key, defaultValue)
 
   useEffect(() => {
     try {
@@ -24,9 +30,18 @@ export const useLocalStorage = (key, defaultValue) => {
   }, [key, value])
 
   useEffect(() => {
+    if (storedState.key !== key) {
+      setStoredState({ key, value })
+    }
+  }, [key, storedState.key, value])
+
+  useEffect(() => {
     const handleStorageChange = (event) => {
-      if (event.key === key) {
-        setValue(readStoredValue(key, defaultValue))
+      if (event.key === key || event.key === null) {
+        setStoredState({
+          key,
+          value: event.key === null ? defaultValue : readStoredValue(key, defaultValue),
+        })
       }
     }
 
@@ -35,10 +50,16 @@ export const useLocalStorage = (key, defaultValue) => {
   }, [key, defaultValue])
 
   const updateValue = useCallback((nextValue) => {
-    setValue((currentValue) =>
-      typeof nextValue === 'function' ? nextValue(currentValue) : nextValue,
-    )
-  }, [])
+    setStoredState((currentState) => {
+      const currentValue = currentState.key === key
+        ? currentState.value
+        : readStoredValue(key, defaultValue)
+      return {
+        key,
+        value: typeof nextValue === 'function' ? nextValue(currentValue) : nextValue,
+      }
+    })
+  }, [key, defaultValue])
 
   return [value, updateValue]
 }

@@ -31,9 +31,13 @@ function tasksReducer(state, action) {
         ),
       }
     case taskActions.FILTER:
-      return { ...state, filter: action.payload }
+      return ['all', 'active', 'completed'].includes(action.payload)
+        ? { ...state, filter: action.payload }
+        : state
     case taskActions.SORT:
-      return { ...state, sort: action.payload }
+      return ['asc', 'desc'].includes(action.payload)
+        ? { ...state, sort: action.payload }
+        : state
     default:
       return state
   }
