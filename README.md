@@ -90,8 +90,50 @@ TaskList ── useRef ── input DOM (focus sin render adicional)
 4. En React DevTools, abre **Profiler**, inicia una grabación, agrega una tarea y completa una fila. Revisa los commits y qué componentes renderizaron. `TaskList` y `TaskRow` están memoizados; las callbacks estables evitan renders de filas que no recibieron props nuevas. El cambio de lista sí debe actualizar la fila afectada.
 5. Guarda capturas propias de la ejecución, la salida de lint y la grabación de Profiler. Las capturas y la explicación personal son evidencia que debe obtener el alumno en su entorno; no se generan automáticamente desde el código.
 
-## Estructura principal
+## Evidencias de ejecución
 
+### Evidencia 1. Dashboard de gestión de tareas
+
+Se verificó el funcionamiento de la aplicación Taskflow, incluyendo el registro de tareas, los indicadores de tareas totales, pendientes y completadas.
+
+![Dashboard de Taskflow](evidencias/01-dashboard.png)
+
+### Evidencia 2. Gestión de tareas con useReducer
+
+Se implementaron las acciones ADD, REMOVE, TOGGLE, FILTER y SORT para administrar las tareas mediante actualizaciones inmutables del estado.
+
+![Gestión de tareas](evidencias/02-funcionalidades.png)
+
+### Evidencia 3. Persistencia con localStorage
+
+Se implementó el almacenamiento de tareas y de la preferencia de tema claro u oscuro mediante localStorage, permitiendo recuperar la información al recargar la aplicación.
+
+![Persistencia localStorage](evidencias/03-localstorage.png)
+
+### Evidencia 4. Validación con ESLint y Vite
+
+Se ejecutaron los comandos `npm run lint` y `npm run build`, finalizando sin errores. Esto permitió comprobar las reglas de análisis estático y la generación de la compilación de producción.
+
+![Validación ESLint y Vite](evidencias/04-eslint-build.png)
+
+### Evidencia 5. Análisis de rendimiento con React DevTools Profiler
+
+Se utilizó React DevTools Profiler para registrar los renderizados de la aplicación Taskflow. Durante la grabación se obtuvieron 49 commits.
+
+En el commit 23 se observó un tiempo de renderizado de 0.2 ms, identificándose una actualización originada en `TaskList2`. Se visualizaron también los componentes `App`, `ThemeProvider`, `Dashboard` y las filas de tareas.
+
+La aplicación utiliza `useMemo`, `useCallback` y `React.memo` para optimizar el procesamiento de tareas y reducir renderizados innecesarios.
+
+![Análisis con React DevTools Profiler](evidencias/05-profiler.png)
+
+### Evidencia 6. Cleanup de useEffect
+
+Se implementó la limpieza del evento `storage` mediante `removeEventListener`, evitando mantener listeners obsoletos cuando el efecto se desmonta o cambia alguna de sus dependencias.
+
+![Cleanup de useEffect](evidencias/06-cleanup.png)
+
+## Estructura principal
+      
 ```text
 src/
 ├── App.jsx

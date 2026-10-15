@@ -59,10 +59,6 @@ button { color: inherit; }
 .nav-icon { font-size: 16px; }
 .nav-count { margin-left: auto; color: #8276e9; font-size: 10px; }
 .sidebar-bottom { margin-top: auto; }
-.sidebar-tip { padding: 17px 14px; margin: 0 1px 21px; background: var(--surface-soft); border: 1px solid var(--line); border-radius: 9px; }
-.tip-spark { display: block; margin-bottom: 8px; color: #7667ee; font-size: 19px; }
-.sidebar-tip strong { font: 700 11px Manrope, sans-serif; }
-.sidebar-tip p { margin: 5px 0 0; color: var(--muted); font-size: 10px; line-height: 1.6; }
 .profile { display: flex; align-items: center; gap: 9px; padding: 13px 5px 16px; border-top: 1px solid var(--line); }
 .avatar { width: 31px; height: 31px; display: grid; place-items: center; border-radius: 50%; background: #f1dfd2; color: #745746; font-size: 12px; font-weight: 700; }
 .profile-copy { display: flex; flex-direction: column; gap: 2px; font-size: 10px; }
@@ -151,7 +147,7 @@ h1 { margin-bottom: 5px; font: 800 31px Manrope, sans-serif; letter-spacing: -1.
   .brand > span:last-child, .sidebar-section-label, .nav-item:not(.active), .nav-item { font-size: 0; }
   .nav-item { width: 40px; justify-content: center; padding: 0; }
   .nav-icon { font-size: 17px; }
-  .nav-count, .sidebar-tip, .profile-copy, .profile-menu { display: none; }
+  .nav-count, .profile-copy, .profile-menu { display: none; }
   .profile { justify-content: center; }
   .topbar { height: 57px; padding: 0 16px; }
   .content { padding: 30px 15px 20px; }

@@ -123,11 +123,6 @@ function Dashboard() {
         </button>
 
         <div className="sidebar-bottom">
-          <div className="sidebar-tip">
-            <span className="tip-spark">✦</span>
-            <strong>Un paso a la vez</strong>
-            <p>Las grandes cosas se construyen con pequeñas tareas.</p>
-          </div>
           <div className="profile">
             <div className="avatar">A</div>
             <div className="profile-copy"><strong>Alumno</strong><span>Mi espacio</span></div>
